@@ -4,7 +4,8 @@ output-file: "Nome do alocado - análise 7 e 8"
 ---
 
 ```{r setup}
-source("rdocs/consultor4.R")
+source("rdocs/entrega4.R")
+#| include: false
 ```
 
 ```{r}

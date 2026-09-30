@@ -156,3 +156,70 @@ print_quadro_resumo <- function(data, var_name, title="Medidas resumo da(o) [nom
   
   writeLines(latex)
 }
+
+print_quadro <- function(data, var_x, var_y,
+                         title = "Valores apresentados",
+                         label = "quad:valores",
+                         nome_x = "Ano",
+                         nome_y = "Receita Média (R$)") {
+  
+  var_x <- rlang::as_name(rlang::ensym(var_x))
+  var_y <- rlang::as_name(rlang::ensym(var_y))
+  
+  quadro <- data |>
+    select(
+      all_of(var_x),
+      all_of(var_y)
+    ) |>
+    mutate(
+      Valor = format(
+        round(.data[[var_y]], 2),
+        big.mark = ".",
+        decimal.mark = ",",
+        nsmall = 2,
+        scientific = FALSE
+      )
+    )
+  
+  nome_x <- str_replace_all(nome_x, fixed("$"), "\\$")
+  nome_y <- str_replace_all(nome_y, fixed("$"), "\\$")
+  
+  latex <- str_c(
+    "\\begin{quadro}[H]
+\t\\setlength{\\tabcolsep}{9pt}
+\t\\renewcommand{\\arraystretch}{1.20}
+\t\\caption{", title, "}
+\t\\centering
+\t\\begin{adjustbox}{max width=\\textwidth}
+\t\\begin{tabular}{| l | c |}
+\t\\hline
+\t\\textbf{", nome_x, "} & \\textbf{", nome_y, "} \\\\
+\t\\hline
+",
+    sep = ""
+  )
+  
+  for (i in seq_len(nrow(quadro))) {
+    
+    latex <- str_c(
+      latex,
+      as.character(quadro[[var_x]][i]),
+      " & ",
+      quadro$Valor[i],
+      " \\\\\n",
+      sep = ""
+    )
+  }
+  
+  latex <- str_c(
+    latex,
+    "\t\\hline
+\t\\end{tabular}
+\t\\label{", label, "}
+\t\\end{adjustbox}
+\\end{quadro}",
+    sep = ""
+  )
+  
+  writeLines(latex)
+}
