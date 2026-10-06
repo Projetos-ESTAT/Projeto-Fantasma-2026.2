@@ -25,7 +25,7 @@ tinytex::install_tinytex()
 Esse template foi criado para o alocado conseguir observar como ficaria sua análise o arquivo principal. É daqui que o gerente de projetos irá copiar a análise e inserir no documento principal que gerará o relatório estatístico.
 
 # Análises
-oi
+
 ## Análise 1
 
 ## Análise 2
